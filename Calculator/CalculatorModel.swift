@@ -10,10 +10,13 @@ import Foundation
 
 struct CalculatorModel {
     private var accumulator: Double?
+    private var pbo: PendingBinaryOperation?
     
     private enum Operation {
         case constant(Double)
         case unaryOperation((Double) -> Double)
+        case binaryOperation((Double, Double) -> Double)
+        case equals
     }
     
     private var operations: Dictionary<String, Operation> = [
@@ -24,17 +27,22 @@ struct CalculatorModel {
         "cos" : Operation.unaryOperation(cos),
         "sin" : Operation.unaryOperation(sin),
         "tg" : Operation.unaryOperation(tan),
-        "±" : Operation.unaryOperation({ $0 * (-1) }),
+        "±" : Operation.unaryOperation({ -$0 }),
+        "+" : Operation.binaryOperation({ $0 + $1}),
+        "-" : Operation.binaryOperation({ $0 - $1}),
+        "*" : Operation.binaryOperation({ $0 * $1}),
+        "/" : Operation.binaryOperation({ $0 / $1}),
+        "=" : Operation.equals
     ]
-    
-    mutating func setOperand(_ newValue:Double) {
-        accumulator = newValue
-    }
     
     var result: Double? {
         get {
             return accumulator
         }
+    }
+    
+    mutating func setOperand(_ newValue:Double) {
+        accumulator = newValue
     }
     
     mutating func performOperation(_ op: String) {
@@ -46,7 +54,40 @@ struct CalculatorModel {
                 if let operand = accumulator {
                     accumulator = associatedUnaryOperation(operand)
                 }
+            case .binaryOperation(let function):
+                if accumulator != nil {
+                    pbo = PendingBinaryOperation(function: function,
+                                                 firstOperand: accumulator!)
+                    accumulator = nil
+                }
+            case .equals:
+                performPendingBinaryOperation()
             }
         }
     }
+    
+    private mutating func performPendingBinaryOperation() {
+        if pbo != nil && accumulator != nil {
+            accumulator = pbo!.perform(with: accumulator!)
+            pbo = nil
+        }
+    }
+    
+    private struct PendingBinaryOperation {
+        let function: (Double, Double) -> Double
+        let firstOperand: Double
+        
+        func perform(with secondOperand:Double) -> Double {
+            return function(firstOperand, secondOperand)
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
