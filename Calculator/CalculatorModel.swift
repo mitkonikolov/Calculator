@@ -1,6 +1,6 @@
 //
 //  CalculaterModel.swift
-//  Calculator
+//  Calculator/Users/Mitko/Developer/Calculator/Calculator/Base.lproj/Main.storyboard
 //
 //  Created by Mitko Nikolov on 8/11/17.
 //  Copyright © 2017 Mitko Nikolov. All rights reserved.
@@ -19,8 +19,12 @@ struct CalculatorModel {
     private var operations: Dictionary<String, Operation> = [
         "π" : Operation.constant(Double.pi),
         "e" : Operation.constant(M_E),
+        "AC" : Operation.constant(0),
         "√" : Operation.unaryOperation(sqrt),
-        "cos" : Operation.unaryOperation(cos)
+        "cos" : Operation.unaryOperation(cos),
+        "sin" : Operation.unaryOperation(sin),
+        "tg" : Operation.unaryOperation(tan),
+        "±" : Operation.unaryOperation({ $0 * (-1) }),
     ]
     
     mutating func setOperand(_ newValue:Double) {
@@ -44,16 +48,5 @@ struct CalculatorModel {
                 }
             }
         }
-//        switch op {
-//        case "π":
-//            accumulator = Double.pi
-//        case "√":
-//            if let operand = accumulator {
-//                accumulator = sqrt(operand)
-//            }
-//        default:
-//            print(1)
-//            break;
-//        }
     }
 }
