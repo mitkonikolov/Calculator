@@ -27,11 +27,15 @@ struct CalculatorModel {
         "cos" : Operation.unaryOperation(cos),
         "sin" : Operation.unaryOperation(sin),
         "tg" : Operation.unaryOperation(tan),
+        "cotg" : Operation.unaryOperation({ tan(1 / $0) }),
+        "log2" : Operation.unaryOperation(log2),
         "±" : Operation.unaryOperation({ $0 * (-1) }),
         "+" : Operation.binaryOperation({ $0 + $1}),
         "-" : Operation.binaryOperation({ $0 - $1}),
         "*" : Operation.binaryOperation({ $0 * $1}),
         "/" : Operation.binaryOperation({ $0 / $1}),
+        "^" : Operation.binaryOperation({ pow($0, $1) }),
+        "log y" : Operation.binaryOperation({ log($1)/log($0) }),
         "=" : Operation.equals
     ]
     
