@@ -13,15 +13,24 @@ class ViewController: UIViewController {
     private var model = CalculatorModel()
     
     var userIsInTheMiddleOfTyping = false
+    private var userEnteredADot = false
     
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit: String = sender.currentTitle!
         if userIsInTheMiddleOfTyping {
-            display.text = display.text! + digit
+            if digit != "." || userEnteredADot != true {
+                display.text = display.text! + digit
+            }
         }
         else {
-            display.text = digit
-            userIsInTheMiddleOfTyping = true
+            if digit != "." || userEnteredADot != true {
+                display.text = digit
+                userIsInTheMiddleOfTyping = true
+            }
+        }
+        
+        if digit == "." {
+            userEnteredADot = true
         }
     }
     
@@ -29,6 +38,7 @@ class ViewController: UIViewController {
         if userIsInTheMiddleOfTyping {
             model.setOperand(displayValue)
             userIsInTheMiddleOfTyping = false
+            userEnteredADot = false
         }
         if let mathematicalSymbol = sender.currentTitle {
             model.performOperation(mathematicalSymbol)

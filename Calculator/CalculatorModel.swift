@@ -27,7 +27,7 @@ struct CalculatorModel {
         "cos" : Operation.unaryOperation(cos),
         "sin" : Operation.unaryOperation(sin),
         "tg" : Operation.unaryOperation(tan),
-        "±" : Operation.unaryOperation({ -$0 }),
+        "±" : Operation.unaryOperation({ $0 * (-1) }),
         "+" : Operation.binaryOperation({ $0 + $1}),
         "-" : Operation.binaryOperation({ $0 - $1}),
         "*" : Operation.binaryOperation({ $0 * $1}),
